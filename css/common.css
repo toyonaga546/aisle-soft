@@ -1,3 +1,5 @@
+/* common.css */
+
 :root {
   /* レイアウト設定 */
   --site-max-width: 1200px;
@@ -29,6 +31,12 @@
   --font-size-sm: 0.9375rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
+
+  /* 【追加】ヘッダー固定用スペーサー計算 */
+  /* PC: Header高さ(80px) + 浮き(20px) + コンテンツとの余白(20px) = 120px */
+  --header-space-desktop: 120px;
+  /* SP: Header高さ(60px) */
+  --header-space-mobile: 60px;
 }
 
 /* ページ全体のレイアウト（フッター固定対応） */
@@ -50,6 +58,16 @@ html, body {
   background: #f8f9fa;
   width: 100%;
   overflow-x: hidden;
+  
+  /* 【追加】固定ヘッダーの分だけ上部に余白を確保 */
+  padding-top: var(--header-space-desktop);
+}
+
+/* 【追加】ヘッダーのモバイル切り替え(999px)に合わせて余白を調整 */
+@media (max-width: 999px) {
+  .l-site {
+    padding-top: var(--header-space-mobile);
+  }
 }
 
 .l-site__main {

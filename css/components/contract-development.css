@@ -1,0 +1,124 @@
+/* 親要素 .l-section__container の内側に配置されることを前提とする */
+.contract-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* 【変更点】カードのコンテナをFlexboxに変更し、中央寄せを適用。
+   grid-template-columnsの代わりに flex-wrap と width を使用。
+*/
+.contract-cards {
+  display: flex; /* Flexboxに変更 */
+  flex-wrap: wrap; /* 折り返しを有効にする */
+  justify-content: center; /* 【最重要】カード全体を中央に寄せる */
+  
+  gap: var(--spacing-xl, 40px); /* ギャップはFlexboxでも使用 */
+  padding-top: var(--spacing-xl, 40px);
+}
+
+/* カードスタイル */
+.contract-card {
+  background: var(--color-white, #fff);
+  border-radius: var(--spacing-md, 16px); 
+  box-shadow: 0 4px 15px var(--color-shadow-base); 
+  padding: 32px 20px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%; 
+  
+  /* 【変更点】3列表示のための幅を計算 */
+  /* (100% / 3) からギャップの 40px の約2/3を引くことで、きれいに3列が並びます */
+  width: calc(33.33% - 27px); 
+  min-width: 250px; /* カードが小さくなりすぎないための下限 */
+}
+
+.contract-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px var(--color-shadow-primary); 
+}
+
+.contract-card__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.contract-card__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary, #2860A0);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.contract-card__list {
+  list-style-type: none; 
+  padding-left: 0;
+  margin: 0;
+  text-align: left;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.contract-card__list li {
+  position: relative;
+  padding-left: 1.5em;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.contract-card__list li::before {
+  content: "•"; 
+  color: var(--color-primary, #2860A0);
+  font-size: 1.5em;
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 1.3;
+  font-weight: bold;
+}
+
+/* ========================
+   レスポンシブ対応
+   ======================== */
+
+@media (max-width: 1000px) {
+  /* 3列を維持しつつギャップを調整 */
+  .contract-cards {
+    gap: var(--spacing-lg, 24px);
+  }
+  .contract-card {
+      /* ギャップ 24px に合わせて幅を調整 */
+      width: calc(33.33% - 16px); 
+      min-width: 200px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* 【変更点】2列に切り替え */
+  .contract-cards {
+    gap: 24px;
+    padding-top: var(--spacing-lg, 24px);
+  }
+  .contract-card {
+      /* 2列表示のための幅を計算 (50%からギャップの半分を引く) */
+      width: calc(50% - 12px); 
+  }
+}
+
+@media (max-width: 600px) {
+  .contract-cards {
+    gap: var(--spacing-lg, 24px);
+  }
+  .contract-card {
+    /* 【変更点】1列表示 */
+    width: 100%; 
+    min-width: 0;
+    padding: 24px 16px 18px 16px;
+  }
+}

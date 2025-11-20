@@ -1,4 +1,4 @@
-/* header.css: サイト共通ヘッダー用スタイル */
+/* header.css: サイト共通ヘッダー用スタイル（改修版） */
 
 :root {
   /* 主要な色を定義 */
@@ -11,6 +11,8 @@
   --color-shadow-primary: rgba(40,96,160,0.08);
   --color-shadow-base: rgba(0,0,0,0.04);
   --color-shadow-menu: rgba(0,0,0,0.15);
+  /* ヘッダー用シャドウ（少し強めにして浮遊感を出す） */
+  --color-shadow-header: 0 4px 20px rgba(0, 0, 0, 0.08);
 
   /* スペーシングを定義 */
   --spacing-xs: 4px;
@@ -28,28 +30,59 @@
   /* その他のプロパティを定義 */
   --header-height-desktop: 80px;
   --header-height-mobile: 60px;
-  --header-logo-height-desktop: 48px;
-  --header-logo-height-mobile: 40px;
-  --border-radius-sm: 4px;
+  --header-logo-height-desktop: 30px;
+  --header-logo-height-mobile: 30px;
+  
+  /* ヘッダーデザイン用変数 */
+  --header-float-gap: 20px; /* デスクトップで上端からどれくらい空けるか */
+  --header-radius: 24px;    /* 角丸のサイズ */
 }
 
+/* ==============================================
+   ヘッダー本体 (Wrapper)
+   ============================================== */
 .header {
-  background: var(--color-white);
+  /* 画面上部に固定 */
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  box-shadow: 0 2px 8px var(--color-shadow-base);
+  z-index: 1000;
+  
+  /* デスクトップ初期状態: 背景透明・浮遊配置 */
+  background: transparent;
+  padding-top: var(--header-float-gap);
+  
+  /* 横の透過部分をクリック可能（下の要素にアクセス可能）にするための設定 */
+  pointer-events: none; 
 }
 
+/* ==============================================
+   ヘッダー内部コンテナ (Capsule)
+   ============================================== */
 .header__container {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between; /* 左右端に配置 */
   position: relative;
-  max-width: var(--site-max-width);
-  margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  
+  /* デスクトップ: カプセル型デザイン */
+  width: 90%; /* 画面幅の90% */
+  max-width: var(--site-max-width); /* 最大幅はサイト共通幅に合わせる */
+  margin: 0 auto; /* 中央寄せ */
   min-height: var(--header-height-desktop);
+  padding: 0 var(--spacing-xl);
+  
+  /* 装飾: 白背景・角丸・影 */
+  background: var(--color-white);
+  border-radius: var(--header-radius);
+  box-shadow: var(--color-shadow-header);
+  
+  /* コンテナ内部はクリックを受け付ける */
+  pointer-events: auto;
 }
 
+/* ロゴエリア */
 .header__logo-area {
   flex: 0 0 auto;
   display: flex;
@@ -68,10 +101,8 @@
 }
 
 /* PC用アクションボタンとナビゲーション */
+/* ※絶対配置をやめ、Flexboxの流れに任せる形に調整 */
 .header__actions--desktop {
-  position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-xl);
   display: flex;
   flex-direction: row;
   gap: var(--spacing-md);
@@ -79,9 +110,7 @@
 }
 
 .header__nav {
-  position: absolute;
-  right: 32px;
-  top: 50px;
+  /* 右端寄せのため margin-left: auto でも可だが、justify-content: space-between があるので不要 */
 }
 
 .header__nav-list {
@@ -91,6 +120,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  align-items: center;
 }
 
 .header__nav-link {
@@ -126,7 +156,6 @@
   background: var(--color-primary);
   color: var(--color-white);
   border: none;
-  border-radius: 0;
   padding: 6px 14px;
   font-size: var(--font-size-sm);
   text-decoration: none;
@@ -135,11 +164,27 @@
   text-align: center;
   display: inline-flex;
   align-items: center;
+  /* ボタンも角丸に合わせるかはお好みで（今回は指定なし） */
 }
 
-/* レスポンシブ: モバイル用ハンバーガーメニューとメニュー */
+/* ==============================================
+   レスポンシブ: モバイル (999px以下)
+   ============================================== */
 @media (max-width: 999px) {
+  /* モバイル時のヘッダー本体: 通常の固定ヘッダーに戻す */
+  .header {
+    padding-top: 0; /* 浮かせない */
+    background: var(--color-white); /* 背景白 */
+    box-shadow: 0 2px 8px var(--color-shadow-base); /* 通常の影 */
+    pointer-events: auto; /* 全体をクリック可能に */
+  }
+
+  /* モバイル時のコンテナ: 角丸解除・全幅 */
   .header__container {
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    box-shadow: none; /* 親要素に影をつけるため解除 */
     min-height: var(--header-height-mobile);
     padding: var(--spacing-md) var(--spacing-lg);
     justify-content: space-between;
@@ -198,7 +243,6 @@
     padding-top: 80px;
   }
   
-  /* オーバーレイ: 非表示時はクリックを透過させる（pointer-events:none） */
   .header__overlay {
     display: block;
     position: fixed;
@@ -211,7 +255,7 @@
     z-index: 999;
     opacity: 0;
     transition: opacity 0.3s ease;
-    pointer-events: none; /* 重要: 閉じているときはクリックを通す */
+    pointer-events: none;
   }
 
   .header__nav-menu.is-open {
@@ -219,7 +263,7 @@
   }
   .header__overlay.is-open {
     opacity: 1;
-    pointer-events: auto; /* オープン時はオーバーレイでクリックを受け付ける */
+    pointer-events: auto;
   }
 
   .header__nav-list {
@@ -316,7 +360,6 @@
     gap: var(--spacing-md);
   }
 
-  /* 超小型デバイス用のハンバーガーアニメーション調整 */
   .header__nav-toggle.is-open .header__nav-toggle-line:nth-child(1) {
     transform: rotate(45deg) translate(4px, 4px);
   }
