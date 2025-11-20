@@ -28,8 +28,8 @@
   /* その他のプロパティを定義 */
   --header-height-desktop: 80px;
   --header-height-mobile: 60px;
-  --header-logo-height-desktop: 48px;
-  --header-logo-height-mobile: 40px;
+  --header-logo-height-desktop: 30px;
+  --header-logo-height-mobile: 30px;
   --border-radius-sm: 4px;
 }
 
@@ -81,16 +81,18 @@
 .header__nav {
   position: absolute;
   right: 32px;
-  top: 50px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.header__nav-list {
-  display: flex;
-  flex-direction: row;
-  gap: var(--spacing-xl);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  .header__nav-list {
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-xl);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center; /* 下寄せ→中央寄せに変更 */
 }
 
 .header__nav-link {
